@@ -1,0 +1,9 @@
+experiment_name,model_type,pca,optuna,f1_score
+RandomForest_NoPCA_NoOptuna,RandomForest,False,False,0.8073070527516135
+GradientBoosting_NoPCA_NoOptuna,GradientBoosting,False,False,0.7956958665149791
+XGBoost_NoPCA_NoOptuna,XGBoost,False,False,0.800106720504144
+LightGBM_NoPCA_NoOptuna,LightGBM,False,False,0.8005647352357782
+RandomForest_PCA_NoOptuna,RandomForest,True,False,0.7662357012936244
+GradientBoosting_PCA_NoOptuna,GradientBoosting,True,False,0.7779535179848931
+XGBoost_PCA_NoOptuna,XGBoost,True,False,0.7765986098208154
+LightGBM_PCA_NoOptuna,LightGBM,True,False,0.7828401452986314

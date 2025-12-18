@@ -1,0 +1,17 @@
+experiment_name,model_type,pca,optuna,f1_score
+RandomForest_NoPCA_Optuna,RandomForest,False,True,0.8203106969346059
+XGBoost_NoPCA_Optuna,XGBoost,False,True,0.8187589715963839
+RandomForest_NoPCA_NoOptuna,RandomForest,False,False,0.8073070527516135
+LightGBM_NoPCA_NoOptuna,LightGBM,False,False,0.8005647352357782
+LightGBM_NoPCA_Optuna,LightGBM,False,True,0.8004565999446546
+XGBoost_NoPCA_NoOptuna,XGBoost,False,False,0.800106720504144
+GradientBoosting_NoPCA_NoOptuna,GradientBoosting,False,False,0.7956958665149791
+GradientBoosting_NoPCA_Optuna,GradientBoosting,False,True,0.7941782943907765
+LightGBM_PCA_NoOptuna,LightGBM,True,False,0.7828401452986314
+LightGBM_PCA_Optuna,LightGBM,True,True,0.78123666044304
+XGBoost_PCA_Optuna,XGBoost,True,True,0.7804066687701351
+GradientBoosting_PCA_Optuna,GradientBoosting,True,True,0.7794449077190335
+GradientBoosting_PCA_NoOptuna,GradientBoosting,True,False,0.7779535179848931
+XGBoost_PCA_NoOptuna,XGBoost,True,False,0.7765986098208154
+RandomForest_PCA_NoOptuna,RandomForest,True,False,0.7662357012936244
+RandomForest_PCA_Optuna,RandomForest,True,True,0.7618365208388456
