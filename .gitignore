@@ -1,26 +1,23 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
-.Python
 venv/
 env/
 
 # Jupyter
 .ipynb_checkpoints/
 
-# Data files (too large)
+# Data
 data/train.csv
-
-# Database (too large, optional)
-# db/*.db
 
 # OS
 .DS_Store
-.AppleDouble
-.LSOverride
 
 # IDE
 .vscode/
 .idea/
+
+# Deployment
+*.tar.gz
+upload_to_dagshub.py
