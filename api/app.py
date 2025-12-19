@@ -1,3 +1,4 @@
+cat > /Users/karthika/housing_app_fall25/api/app.py << 'EOF'
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict
 import pickle
@@ -30,20 +31,26 @@ class ModelLoader:
         try:
             print("Loading preprocessing objects...")
             
+            # Load scaler
             with open(models_path / 'scaler.pkl', 'rb') as f:
                 self.scaler = pickle.load(f)
             
+            # Load PCA
             with open(models_path / 'pca.pkl', 'rb') as f:
                 self.pca = pickle.load(f)
             
+            # Load label encoders
             with open(models_path / 'label_encoders.pkl', 'rb') as f:
                 self.label_encoders = pickle.load(f)
             
+            # Load feature names
             with open(models_path / 'feature_names.pkl', 'rb') as f:
                 self.feature_names = pickle.load(f)
             
+            # Load experiment results
             self.experiment_results = pd.read_csv(models_path / 'experiment_results.csv')
             
+            # Find best model
             best_experiment = self.experiment_results.loc[
                 self.experiment_results['f1_score'].idxmax()
             ]
@@ -81,8 +88,9 @@ async def startup_event():
     print("✅ API Ready!")
     print("="*70)
 
+# Pydantic model for input - FIXED
 class PredictionInput(BaseModel):
-    features: Dict[str, Any]
+    features: Dict[str, Any]  # Changed from 'any' to 'Any'
     
     model_config = ConfigDict(
         json_schema_extra={
@@ -161,33 +169,45 @@ async def predict(input_data: PredictionInput):
         if loader.best_model is None:
             raise HTTPException(status_code=503, detail="Model not loaded")
         
+        # Convert input to dataframe
         input_dict = input_data.features
+        
+        # Create dataframe with all expected features
         df = pd.DataFrame([input_dict])
         
+        # Reorder columns to match training order
         missing_cols = set(loader.feature_names) - set(df.columns)
         if missing_cols:
+            # Fill missing columns with default values
             for col in missing_cols:
                 if col in loader.label_encoders:
                     df[col] = 'Missing'
                 else:
                     df[col] = 0
         
+        # Keep only the columns used in training
         df = df[loader.feature_names]
         
+        # Encode categorical variables
         for col, encoder in loader.label_encoders.items():
             if col in df.columns:
                 try:
                     df[col] = encoder.transform(df[col].astype(str))
                 except ValueError:
+                    # Handle unseen labels
                     df[col] = encoder.transform(['Missing'])
         
+        # Scale features
         X_scaled = loader.scaler.transform(df)
         
+        # Apply PCA if the best model uses it
         if loader.best_model_info['pca']:
             X_scaled = loader.pca.transform(X_scaled)
         
+        # Make prediction
         prediction = loader.best_model.predict(X_scaled)[0]
         
+        # Get probabilities if available
         if hasattr(loader.best_model, 'predict_proba'):
             probabilities = loader.best_model.predict_proba(X_scaled)[0].tolist()
             confidence = float(max(probabilities))
@@ -195,6 +215,7 @@ async def predict(input_data: PredictionInput):
             probabilities = [1.0 if i == prediction else 0.0 for i in range(4)]
             confidence = 1.0
         
+        # Map prediction to label
         category_labels = {
             0: "Low Price Range",
             1: "Medium Price Range",
@@ -216,3 +237,4 @@ async def predict(input_data: PredictionInput):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+EOF
