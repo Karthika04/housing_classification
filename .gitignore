@@ -1,3 +1,13 @@
+!notebooks/
+!notebooks/**
+!api/
+!api/**
+!streamlit/
+!streamlit/**
+!db/
+!db/**
+!.gitignore
+
 # Python
 __pycache__/
 *.py[cod]
